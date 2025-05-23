@@ -12,6 +12,7 @@ import {
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignUpResponse } from '../interfaces/sign-up-response/sign-up-response.interface';
 import { MicroserviceError } from '../interfaces/microservice-error/microservice-error.interface';
+import { User } from 'apps/auth/generated/prisma';
 
 const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
@@ -52,6 +53,27 @@ export class AuthService {
       res.status(statusCode).json({ accessToken, user });
     } catch (error) {
       this.handleError(error as MicroserviceError, 'sign up');
+    }
+  }
+
+  async validateUser(email: string, pass: string) {
+    return await firstValueFrom<Partial<User>>(
+      this.authClient.send({ cmd: 'validate-user' }, { email, pass }),
+    );
+  }
+
+  async signIn(partialUser: Partial<User>, res: Response) {
+    try {
+      const response = await firstValueFrom<SignUpResponse>(
+        this.authClient.send({ cmd: 'sign-in' }, partialUser),
+      );
+
+      const { refreshToken, statusCode, accessToken, user } = response;
+
+      res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
+      res.status(statusCode).json({ accessToken, user });
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'sign in');
     }
   }
 }

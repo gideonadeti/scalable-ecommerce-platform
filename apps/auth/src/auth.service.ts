@@ -93,4 +93,34 @@ export class AuthService {
       this.handleError(error, 'sign up');
     }
   }
+
+  async validateUser(email: string, pass: string) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) return null;
+      if (!user.password) return null;
+
+      const isCorrectPassword = await bcrypt.compare(pass, user.password);
+
+      if (!isCorrectPassword) return null;
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...rest } = user;
+
+      return rest;
+    } catch (error) {
+      this.handleError(error, 'validate user');
+    }
+  }
+
+  async signIn(user: Partial<User>) {
+    try {
+      return await this.handleSuccessfulAuth(user, 200);
+    } catch (error) {
+      this.handleError(error, 'sign in');
+    }
+  }
 }

@@ -8,6 +8,7 @@ import { SignInDto } from './dto/sign-in.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { User } from 'apps/auth/generated/prisma';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +31,11 @@ export class AuthController {
   @Post('sign-out')
   signOut(@Req() req: Request & { user: Partial<User> }, @Res() res: Response) {
     return this.authService.signOut(req.user.id as string, res);
+  }
+
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('refresh-token')
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
+    return this.authService.refreshToken(req, res);
   }
 }

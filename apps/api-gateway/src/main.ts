@@ -1,3 +1,4 @@
+import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import {
@@ -21,6 +22,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle('API Gateway')

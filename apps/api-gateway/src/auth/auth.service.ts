@@ -1,5 +1,5 @@
 import { ClientProxy } from '@nestjs/microservices';
-import { CookieOptions, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { firstValueFrom } from 'rxjs';
 import {
   ConflictException,
@@ -18,7 +18,7 @@ const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'strict' as const,
-  path: '/auth/refresh',
+  path: '/auth/refresh-token',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -85,6 +85,25 @@ export class AuthService {
       res.sendStatus(200);
     } catch (error) {
       this.handleError(error as MicroserviceError, 'sign out');
+    }
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    const user = req.user as Partial<User>;
+    const refreshTokenFromCookie = (req.cookies as { refreshToken: string })
+      .refreshToken;
+
+    try {
+      const response = await firstValueFrom<string>(
+        this.authClient.send(
+          { cmd: 'refresh-token' },
+          { user, refreshTokenFromCookie },
+        ),
+      );
+
+      res.json({ accessToken: response });
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'refresh');
     }
   }
 }

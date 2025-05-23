@@ -28,4 +28,14 @@ export class AuthController {
   handleSignOut(@Payload() data: string) {
     return this.authService.signOut(data);
   }
+
+  @MessagePattern({ cmd: 'refresh-token' })
+  handleRefreshToken(
+    @Payload() data: { user: Partial<User>; refreshTokenFromCookie: string },
+  ) {
+    return this.authService.refreshToken(
+      data.user,
+      data.refreshTokenFromCookie,
+    );
+  }
 }

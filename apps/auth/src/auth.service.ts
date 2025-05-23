@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 
@@ -130,6 +130,35 @@ export class AuthService {
       });
     } catch (error) {
       this.handleError(error, 'sign out');
+    }
+  }
+
+  async refreshToken(user: Partial<User>, refreshTokenFromCookie: string) {
+    try {
+      const existingRefreshToken =
+        await this.prismaService.refreshToken.findUnique({
+          where: { userId: user.id },
+        });
+
+      if (!existingRefreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const isCorrectRefreshToken = await bcrypt.compare(
+        refreshTokenFromCookie,
+        existingRefreshToken.value,
+      );
+
+      if (!isCorrectRefreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const payload = this.createAuthPayload(user) as AuthPayload;
+      const accessToken = this.createJwtToken('access', payload);
+
+      return accessToken;
+    } catch (error) {
+      this.handleError(error, 'refresh token');
     }
   }
 }

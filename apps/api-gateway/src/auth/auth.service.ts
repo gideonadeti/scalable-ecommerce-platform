@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { SignUpDto } from './dto/sign-up.dto';
-import { SignUpResponse } from '../interfaces/sign-up-response/sign-up-response.interface';
+import { SignUpInResponse } from '../interfaces/sign-up-in-response/sign-up-in-response.interface';
 import { MicroserviceError } from '../interfaces/microservice-error/microservice-error.interface';
 import { User } from 'apps/auth/generated/prisma';
 
@@ -43,7 +43,7 @@ export class AuthService {
 
   async signUp(signUpDto: SignUpDto, res: Response) {
     try {
-      const response = await firstValueFrom<SignUpResponse>(
+      const response = await firstValueFrom<SignUpInResponse>(
         this.authClient.send({ cmd: 'sign-up' }, signUpDto),
       );
 
@@ -64,7 +64,7 @@ export class AuthService {
 
   async signIn(partialUser: Partial<User>, res: Response) {
     try {
-      const response = await firstValueFrom<SignUpResponse>(
+      const response = await firstValueFrom<SignUpInResponse>(
         this.authClient.send({ cmd: 'sign-in' }, partialUser),
       );
 

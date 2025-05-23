@@ -1,6 +1,6 @@
 import { User } from 'apps/auth/generated/prisma';
 
-export interface SignUpResponse {
+export interface SignUpInResponse {
   refreshToken: string;
   statusCode: number;
   accessToken: string;

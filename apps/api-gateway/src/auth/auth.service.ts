@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 
 import { SignUpDto } from './dto/sign-up.dto';
-import { SignUpResponse } from '../sign-up-response/sign-up-response.interface';
-import { MicroserviceError } from '../microservice-error/microservice-error.interface';
+import { SignUpResponse } from '../interfaces/sign-up-response/sign-up-response.interface';
+import { MicroserviceError } from '../interfaces/microservice-error/microservice-error.interface';
 
 const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,

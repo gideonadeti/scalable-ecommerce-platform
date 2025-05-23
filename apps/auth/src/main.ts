@@ -1,19 +1,24 @@
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AsyncMicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 import { AuthModule } from './auth.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  const app = await NestFactory.createMicroservice<AsyncMicroserviceOptions>(
     AuthModule,
     {
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'auth_queue',
-      },
+      useFactory: (configService: ConfigService) => ({
+        transport: Transport.RMQ,
+        options: {
+          urls: [configService.get<string>('MESSAGE_BROKER_URL') as string],
+          queue: 'auth_queue',
+        },
+      }),
+      inject: [ConfigService],
     },
   );
+
   await app.listen();
 }
 

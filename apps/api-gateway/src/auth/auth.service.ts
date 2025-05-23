@@ -47,10 +47,10 @@ export class AuthService {
         this.authClient.send({ cmd: 'sign-up' }, signUpDto),
       );
 
-      const { refreshToken, statusCode, accessToken, user } = response;
+      const { refreshToken, accessToken, user } = response;
 
       res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
-      res.status(statusCode).json({ accessToken, user });
+      res.status(201).json({ accessToken, user });
     } catch (error) {
       this.handleError(error as MicroserviceError, 'sign up');
     }
@@ -68,10 +68,10 @@ export class AuthService {
         this.authClient.send({ cmd: 'sign-in' }, partialUser),
       );
 
-      const { refreshToken, statusCode, accessToken, user } = response;
+      const { refreshToken, accessToken, user } = response;
 
       res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
-      res.status(statusCode).json({ accessToken, user });
+      res.json({ accessToken, user });
     } catch (error) {
       this.handleError(error as MicroserviceError, 'sign in');
     }

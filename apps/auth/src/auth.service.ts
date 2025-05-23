@@ -26,7 +26,7 @@ export class AuthService {
     return bcrypt.hash(password, salt);
   }
 
-  private async handleSuccessfulAuth(user: Partial<User>, statusCode: number) {
+  private async handleSuccessfulAuth(user: Partial<User>) {
     const payload = this.createAuthPayload(user) as AuthPayload;
     const accessToken = this.createJwtToken('access', payload);
     const refreshToken = this.createJwtToken('refresh', payload);
@@ -50,7 +50,6 @@ export class AuthService {
 
     return {
       refreshToken,
-      statusCode,
       accessToken,
       user,
     };
@@ -88,7 +87,7 @@ export class AuthService {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user;
 
-      return await this.handleSuccessfulAuth(rest, 201);
+      return await this.handleSuccessfulAuth(rest);
     } catch (error) {
       this.handleError(error, 'sign up');
     }
@@ -118,7 +117,7 @@ export class AuthService {
 
   async signIn(user: Partial<User>) {
     try {
-      return await this.handleSuccessfulAuth(user, 200);
+      return await this.handleSuccessfulAuth(user);
     } catch (error) {
       this.handleError(error, 'sign in');
     }

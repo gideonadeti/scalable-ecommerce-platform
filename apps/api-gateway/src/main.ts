@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('API Gateway')
     .setDescription('API Gateway for the Scalable E-Commerce Platform project')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (_controllerKey: string, methodKey: string) =>

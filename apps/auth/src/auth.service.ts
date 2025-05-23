@@ -123,4 +123,14 @@ export class AuthService {
       this.handleError(error, 'sign in');
     }
   }
+
+  async signOut(userId: string) {
+    try {
+      return await this.prismaService.refreshToken.delete({
+        where: { userId },
+      });
+    } catch (error) {
+      this.handleError(error, 'sign out');
+    }
+  }
 }

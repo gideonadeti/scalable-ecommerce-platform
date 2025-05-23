@@ -23,4 +23,9 @@ export class AuthController {
   handleSignIn(@Payload() data: Partial<User>) {
     return this.authService.signIn(data);
   }
+
+  @MessagePattern({ cmd: 'sign-out' })
+  handleSignOut(@Payload() data: string) {
+    return this.authService.signOut(data);
+  }
 }

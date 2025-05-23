@@ -76,4 +76,15 @@ export class AuthService {
       this.handleError(error as MicroserviceError, 'sign in');
     }
   }
+
+  async signOut(userId: string, res: Response) {
+    try {
+      await firstValueFrom(this.authClient.send({ cmd: 'sign-out' }, userId));
+
+      res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS);
+      res.sendStatus(200);
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'sign out');
+    }
+  }
 }

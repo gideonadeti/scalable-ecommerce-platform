@@ -7,7 +7,7 @@ import { PrismaClient } from 'apps/auth/generated/prisma';
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor(configService: ConfigService) {
     super({
-      errorFormat: 'pretty',
+      errorFormat: 'minimal',
       datasources: {
         db: {
           url: configService.get('DATABASE_URL'),

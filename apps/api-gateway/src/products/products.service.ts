@@ -58,7 +58,7 @@ export class ProductsService {
     } catch (error) {
       this.handleError(
         error as MicroserviceError,
-        `'fetch product with ID ${id}`,
+        `'fetch product with id ${id}`,
       );
     }
   }

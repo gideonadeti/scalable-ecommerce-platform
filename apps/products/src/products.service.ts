@@ -98,7 +98,7 @@ export class ProductsService {
     try {
       return await this.prismaService.product.findUnique({ where: { id } });
     } catch (error) {
-      this.handleError(error, `fetch product with ID ${id}`);
+      this.handleError(error, `fetch product with id ${id}`);
     }
   }
 
@@ -113,7 +113,7 @@ export class ProductsService {
         data: updateProductDto,
       });
     } catch (error) {
-      this.handleError(error, `update product with ID ${id}`);
+      this.handleError(error, `update product with id ${id}`);
     }
   }
 
@@ -123,7 +123,7 @@ export class ProductsService {
         where: { adminId, id },
       });
     } catch (error) {
-      this.handleError(error, `delete product with ID ${id}`);
+      this.handleError(error, `delete product with id ${id}`);
     }
   }
 }

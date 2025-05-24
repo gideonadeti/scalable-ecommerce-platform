@@ -44,4 +44,9 @@ export class ProductsController {
   handleFindAllProducts(@Payload() data: FindAllProductsDto) {
     return this.productsService.findAllProducts(data);
   }
+
+  @MessagePattern({ cmd: 'find-one-product' })
+  handleFindOneProduct(@Payload() data: string) {
+    return this.productsService.findOneProduct(data);
+  }
 }

@@ -94,6 +94,14 @@ export class ProductsService {
     }
   }
 
+  async findOneProduct(id: string) {
+    try {
+      return await this.prismaService.product.findUnique({ where: { id } });
+    } catch (error) {
+      this.handleError(error, `fetch product with ID ${id}`);
+    }
+  }
+
   async updateProduct(
     adminId: string,
     id: string,

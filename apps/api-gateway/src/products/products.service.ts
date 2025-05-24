@@ -50,8 +50,17 @@ export class ProductsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    try {
+      return await firstValueFrom<Product>(
+        this.productsClient.send({ cmd: 'find-one-product' }, id),
+      );
+    } catch (error) {
+      this.handleError(
+        error as MicroserviceError,
+        `'fetch product with ID ${id}`,
+      );
+    }
   }
 
   async update(

@@ -16,4 +16,9 @@ export class CartItemsController {
       data.createCartItemDto,
     );
   }
+
+  @MessagePattern({ cmd: 'find-all-cart-items' })
+  handleFindAllCartItems(@Payload() data: string) {
+    return this.cartItemsService.findAllCartItems(data);
+  }
 }

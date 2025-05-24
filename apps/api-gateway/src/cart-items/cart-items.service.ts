@@ -53,8 +53,19 @@ export class CartItemsService {
     }
   }
 
-  findAll() {
-    return `This action returns all cartItems`;
+  async findAll(userId: string) {
+    try {
+      return await firstValueFrom<CartItem[]>(
+        this.cartItemsClient.send(
+          {
+            cmd: 'find-all-cart-items',
+          },
+          userId,
+        ),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'fetch cart items');
+    }
   }
 
   findOne(id: number) {

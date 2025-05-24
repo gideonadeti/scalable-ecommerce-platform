@@ -56,4 +56,14 @@ export class CartItemsService {
       this.handleError(error, 'create cart item');
     }
   }
+
+  async findAllCartItems(userId: string) {
+    try {
+      return await this.prismaService.cartItem.findMany({
+        where: { userId },
+      });
+    } catch (error) {
+      this.handleError(error, `fetch cart items with user ID ${userId}`);
+    }
+  }
 }

@@ -104,4 +104,14 @@ export class CartItemsService {
       this.handleError(error, `update cart item with ID ${id}`);
     }
   }
+
+  async deleteCartItem(userId: string, id: string) {
+    try {
+      return await this.prismaService.cartItem.delete({
+        where: { id, userId },
+      });
+    } catch (error) {
+      this.handleError(error, `delete cart item with id ${id}`);
+    }
+  }
 }

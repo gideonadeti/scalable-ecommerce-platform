@@ -42,4 +42,9 @@ export class CartItemsController {
       data.updateCartItemDto,
     );
   }
+
+  @MessagePattern({ cmd: 'delete-cart-item' })
+  handleDeleteCartItem(@Payload() data: { userId: string; id: string }) {
+    return this.cartItemsService.deleteCartItem(data.userId, data.id);
+  }
 }

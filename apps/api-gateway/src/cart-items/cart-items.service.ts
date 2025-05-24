@@ -25,19 +25,19 @@ export class CartItemsService {
   private handleError(error: MicroserviceError, action: string) {
     this.logger.error(`Failed to ${action}`, error);
 
-    switch (error.name) {
-      case 'PrismaClientKnownRequestError':
-        if (error.code === 'P2002') {
-          throw new ConflictException('Cart item is already exists');
-        }
+    if (error.name === 'PrismaClientKnownRequestError') {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Cart item already exists');
+      }
 
-        break;
-      case 'NotFoundException':
-        throw new NotFoundException(error.message);
-
-      default:
-        throw new InternalServerErrorException(`Failed to ${action}`);
+      throw new InternalServerErrorException(`Failed to ${action}`);
     }
+
+    if (error.name === 'NotFoundException') {
+      throw new NotFoundException(error.message);
+    }
+
+    throw new InternalServerErrorException(`Failed to ${action}`);
   }
 
   async create(userId: string, createCartItemDto: CreateCartItemDto) {
@@ -101,7 +101,13 @@ export class CartItemsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cartItem`;
+  async remove(userId: string, id: string) {
+    try {
+      return await firstValueFrom<CartItem>(
+        this.cartItemsClient.send({ cmd: 'delete-cart-item' }, { userId, id }),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'delete cart item');
+    }
   }
 }

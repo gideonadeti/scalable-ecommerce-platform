@@ -21,4 +21,9 @@ export class CartItemsController {
   handleFindAllCartItems(@Payload() data: string) {
     return this.cartItemsService.findAllCartItems(data);
   }
+
+  @MessagePattern({ cmd: 'find-one-cart-item' })
+  handleFindOneCartItem(@Payload() data: { userId: string; id: string }) {
+    return this.cartItemsService.findOneCartItem(data.userId, data.id);
+  }
 }

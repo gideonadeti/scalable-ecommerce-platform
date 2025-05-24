@@ -68,8 +68,20 @@ export class CartItemsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cartItem`;
+  async findOne(userId: string, id: string) {
+    try {
+      return await firstValueFrom<CartItem>(
+        this.cartItemsClient.send(
+          { cmd: 'find-one-cart-item' },
+          { userId, id },
+        ),
+      );
+    } catch (error) {
+      this.handleError(
+        error as MicroserviceError,
+        `fetch cart item with id ${id}`,
+      );
+    }
   }
 
   update(id: number, updateCartItemDto: UpdateCartItemDto) {

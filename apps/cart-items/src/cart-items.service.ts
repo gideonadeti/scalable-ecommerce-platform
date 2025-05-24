@@ -66,4 +66,26 @@ export class CartItemsService {
       this.handleError(error, `fetch cart items with user ID ${userId}`);
     }
   }
+
+  async findOneCartItem(userId: string, id: string) {
+    try {
+      const cartItem = await this.prismaService.cartItem.findUnique({
+        where: { id },
+      });
+
+      if (!cartItem) {
+        throw new NotFoundException(`Cart item with id ${id} not found`);
+      }
+
+      if (cartItem.userId !== userId) {
+        throw new BadRequestException(
+          `You are not authorized to access cart item with id ${id}`,
+        );
+      }
+
+      return cartItem;
+    } catch (error) {
+      this.handleError(error, `fetch cart item with id ${id}`);
+    }
+  }
 }

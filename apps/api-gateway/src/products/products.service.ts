@@ -64,7 +64,13 @@ export class ProductsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  remove(adminId: string, id: string) {
+    try {
+      return firstValueFrom(
+        this.productsClient.send({ cmd: 'delete-product' }, { adminId, id }),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'delete product');
+    }
   }
 }

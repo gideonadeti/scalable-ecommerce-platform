@@ -41,4 +41,14 @@ export class ProductsService {
       this.handleError(error, `update product with ID ${id}`);
     }
   }
+
+  async deleteProduct(adminId: string, id: string) {
+    try {
+      return await this.prismaService.product.delete({
+        where: { adminId, id },
+      });
+    } catch (error) {
+      this.handleError(error, `delete product with ID ${id}`);
+    }
+  }
 }

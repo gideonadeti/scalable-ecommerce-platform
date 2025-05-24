@@ -33,4 +33,9 @@ export class ProductsController {
       data.updateProductDto,
     );
   }
+
+  @MessagePattern({ cmd: 'delete-product' })
+  handleDeleteProduct(@Payload() data: { adminId: string; id: string }) {
+    return this.productsService.deleteProduct(data.adminId, data.id);
+  }
 }

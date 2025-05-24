@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CartItemsController } from './cart-items.controller';
 import { CartItemsService } from './cart-items.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -10,6 +11,20 @@ import { PrismaService } from './prisma/prisma.service';
       isGlobal: true,
       envFilePath: 'apps/cart-items/.env',
     }),
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        name: 'PRODUCTS_SERVICE',
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('MESSAGE_BROKER_URL') as string],
+            queue: 'products_queue',
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [CartItemsController],
   providers: [CartItemsService, PrismaService],

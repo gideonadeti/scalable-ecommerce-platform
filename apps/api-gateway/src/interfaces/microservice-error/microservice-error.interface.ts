@@ -6,4 +6,5 @@ export interface MicroserviceError {
   };
   clientVersion?: string;
   name?: string;
+  message?: string;
 }

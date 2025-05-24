@@ -80,9 +80,9 @@ export class ProductsService {
     }
   }
 
-  remove(adminId: string, id: string) {
+  async remove(adminId: string, id: string) {
     try {
-      return firstValueFrom(
+      return await firstValueFrom<Product>(
         this.productsClient.send({ cmd: 'delete-product' }, { adminId, id }),
       );
     } catch (error) {

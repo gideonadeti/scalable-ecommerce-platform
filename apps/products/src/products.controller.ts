@@ -17,4 +17,20 @@ export class ProductsController {
       data.createProductDto,
     );
   }
+
+  @MessagePattern({ cmd: 'update-product' })
+  handleUpdateProduct(
+    @Payload()
+    data: {
+      adminId: string;
+      id: string;
+      updateProductDto: CreateProductDto;
+    },
+  ) {
+    return this.productsService.updateProduct(
+      data.adminId,
+      data.id,
+      data.updateProductDto,
+    );
+  }
 }

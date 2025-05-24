@@ -47,8 +47,21 @@ export class ProductsService {
     return `This action returns a #${id} product`;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(
+    adminId: string,
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ) {
+    try {
+      return await firstValueFrom<Product>(
+        this.productsClient.send(
+          { cmd: 'update-product' },
+          { adminId, id, updateProductDto },
+        ),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'update product');
+    }
   }
 
   remove(id: number) {

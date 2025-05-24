@@ -3,6 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from './prisma/prisma.service';
 import { CreateProductDto } from 'apps/api-gateway/src/products/dto/create-product.dto';
+import { UpdateProductDto } from 'apps/api-gateway/src/products/dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -23,6 +24,21 @@ export class ProductsService {
       });
     } catch (error) {
       this.handleError(error, 'create product');
+    }
+  }
+
+  async updateProduct(
+    adminId: string,
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ) {
+    try {
+      return await this.prismaService.product.update({
+        where: { adminId, id },
+        data: updateProductDto,
+      });
+    } catch (error) {
+      this.handleError(error, `update product with ID ${id}`);
     }
   }
 }

@@ -11,6 +11,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { MicroserviceError } from '../interfaces/microservice-error/microservice-error.interface';
 import { Product } from 'apps/products/generated/prisma';
+import { FindAllProductsDto } from './dto/find-all-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -39,8 +40,14 @@ export class ProductsService {
     }
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(query: FindAllProductsDto) {
+    try {
+      return await firstValueFrom<Product[]>(
+        this.productsClient.send({ cmd: 'find-all-products' }, query),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'fetch products');
+    }
   }
 
   findOne(id: number) {

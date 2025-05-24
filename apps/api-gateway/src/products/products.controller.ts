@@ -8,6 +8,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { ProductsService } from './products.service';
@@ -18,6 +19,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles/roles.decorator';
 import { UserRole } from 'apps/auth/generated/prisma';
 import { UserId } from '../auth/decorators/user-id/user-id.decorator';
+import { FindAllProductsDto } from './dto/find-all-products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -32,8 +34,8 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Query() query: FindAllProductsDto) {
+    return this.productsService.findAll(query);
   }
 
   @Get(':id')

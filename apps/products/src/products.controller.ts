@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { ProductsService } from './products.service';
 import { CreateProductDto } from 'apps/api-gateway/src/products/dto/create-product.dto';
+import { FindAllProductsDto } from 'apps/api-gateway/src/products/dto/find-all-products.dto';
 
 @Controller()
 export class ProductsController {
@@ -37,5 +38,10 @@ export class ProductsController {
   @MessagePattern({ cmd: 'delete-product' })
   handleDeleteProduct(@Payload() data: { adminId: string; id: string }) {
     return this.productsService.deleteProduct(data.adminId, data.id);
+  }
+
+  @MessagePattern({ cmd: 'find-all-products' })
+  handleFindAllProducts(@Payload() data: FindAllProductsDto) {
+    return this.productsService.findAllProducts(data);
   }
 }

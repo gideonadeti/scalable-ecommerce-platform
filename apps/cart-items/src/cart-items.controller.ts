@@ -26,4 +26,20 @@ export class CartItemsController {
   handleFindOneCartItem(@Payload() data: { userId: string; id: string }) {
     return this.cartItemsService.findOneCartItem(data.userId, data.id);
   }
+
+  @MessagePattern({ cmd: 'update-cart-item' })
+  handleUpdateCartItem(
+    @Payload()
+    data: {
+      userId: string;
+      id: string;
+      updateCartItemDto: CreateCartItemDto;
+    },
+  ) {
+    return this.cartItemsService.updateCartItem(
+      data.userId,
+      data.id,
+      data.updateCartItemDto,
+    );
+  }
 }

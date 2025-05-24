@@ -84,8 +84,21 @@ export class CartItemsService {
     }
   }
 
-  update(id: number, updateCartItemDto: UpdateCartItemDto) {
-    return `This action updates a #${id} cartItem`;
+  async update(
+    userId: string,
+    id: string,
+    updateCartItemDto: UpdateCartItemDto,
+  ) {
+    try {
+      return await firstValueFrom<CartItem>(
+        this.cartItemsClient.send(
+          { cmd: 'update-cart-item' },
+          { userId, id, updateCartItemDto },
+        ),
+      );
+    } catch (error) {
+      this.handleError(error as MicroserviceError, 'update cart item');
+    }
   }
 
   remove(id: number) {

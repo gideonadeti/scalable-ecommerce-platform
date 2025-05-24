@@ -10,6 +10,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { Product } from 'apps/products/generated/prisma';
+import { UpdateCartItemDto } from 'apps/api-gateway/src/cart-items/dto/update-cart-item.dto';
 
 @Injectable()
 export class CartItemsService {
@@ -86,6 +87,21 @@ export class CartItemsService {
       return cartItem;
     } catch (error) {
       this.handleError(error, `fetch cart item with id ${id}`);
+    }
+  }
+
+  async updateCartItem(
+    userId: string,
+    id: string,
+    updateCartItemDto: UpdateCartItemDto,
+  ) {
+    try {
+      return await this.prismaService.cartItem.update({
+        where: { id, userId },
+        data: updateCartItemDto,
+      });
+    } catch (error) {
+      this.handleError(error, `update cart item with ID ${id}`);
     }
   }
 }

@@ -8,6 +8,7 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
@@ -40,6 +41,10 @@ export class CartItemsService {
 
     if (error.name === 'BadRequestException') {
       throw new BadRequestException(error.message);
+    }
+
+    if (error.name === 'UnauthorizedException') {
+      throw new UnauthorizedException(error.message);
     }
 
     throw new InternalServerErrorException(`Failed to ${action}`);

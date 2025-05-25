@@ -6,6 +6,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { CreateCartItemDto } from 'apps/api-gateway/src/cart-items/dto/create-cart-item.dto';
@@ -80,7 +81,7 @@ export class CartItemsService {
       }
 
       if (cartItem.userId !== userId) {
-        throw new BadRequestException(
+        throw new UnauthorizedException(
           `You are not authorized to access cart item with id ${id}`,
         );
       }

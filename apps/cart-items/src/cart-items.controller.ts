@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { CartItemsService } from './cart-items.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+
+import { CartItemsService } from './cart-items.service';
 import { CreateCartItemDto } from 'apps/api-gateway/src/cart-items/dto/create-cart-item.dto';
 
 @Controller()

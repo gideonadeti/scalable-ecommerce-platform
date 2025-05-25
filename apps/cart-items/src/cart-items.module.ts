@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CartItemsController } from './cart-items.controller';
-import { CartItemsService } from './cart-items.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrismaService } from './prisma/prisma.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+
+import { CartItemsController } from './cart-items.controller';
+import { CartItemsService } from './cart-items.service';
+import { PrismaService } from './prisma/prisma.service';
 import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
 
 @Module({

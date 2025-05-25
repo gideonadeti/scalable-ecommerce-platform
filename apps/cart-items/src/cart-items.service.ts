@@ -1,3 +1,5 @@
+import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 import {
   BadRequestException,
   Inject,
@@ -5,10 +7,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+
 import { CreateCartItemDto } from 'apps/api-gateway/src/cart-items/dto/create-cart-item.dto';
 import { PrismaService } from './prisma/prisma.service';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
 import { Product } from 'apps/products/generated/prisma';
 import { UpdateCartItemDto } from 'apps/api-gateway/src/cart-items/dto/update-cart-item.dto';
 

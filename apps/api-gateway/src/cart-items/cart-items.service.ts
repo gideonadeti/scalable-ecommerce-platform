@@ -1,3 +1,5 @@
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 import {
   BadRequestException,
   ConflictException,
@@ -10,8 +12,6 @@ import {
 
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
 import { CartItem } from 'apps/cart-items/generated/prisma';
 import { MicroserviceError } from '../interfaces/microservice-error/microservice-error.interface';
 

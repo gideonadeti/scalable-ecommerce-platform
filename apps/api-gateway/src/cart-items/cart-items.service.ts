@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -35,6 +36,10 @@ export class CartItemsService {
 
     if (error.name === 'NotFoundException') {
       throw new NotFoundException(error.message);
+    }
+
+    if (error.name === 'BadRequestException') {
+      throw new BadRequestException(error.message);
     }
 
     throw new InternalServerErrorException(`Failed to ${action}`);

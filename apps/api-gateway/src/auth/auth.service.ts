@@ -94,14 +94,14 @@ export class AuthService {
       .refreshToken;
 
     try {
-      const response = await firstValueFrom<string>(
+      const accessToken = await firstValueFrom<string>(
         this.authClient.send(
           { cmd: 'refresh-token' },
           { user, refreshTokenFromCookie },
         ),
       );
 
-      res.json({ accessToken: response });
+      res.json({ accessToken });
     } catch (error) {
       this.handleError(error as MicroserviceError, 'refresh');
     }

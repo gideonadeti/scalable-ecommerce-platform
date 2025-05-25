@@ -64,7 +64,7 @@ export class CartItemsService {
         where: { userId },
       });
     } catch (error) {
-      this.handleError(error, `fetch cart items with user ID ${userId}`);
+      this.handleError(error, `fetch cart items with user id ${userId}`);
     }
   }
 
@@ -101,7 +101,7 @@ export class CartItemsService {
         data: updateCartItemDto,
       });
     } catch (error) {
-      this.handleError(error, `update cart item with ID ${id}`);
+      this.handleError(error, `update cart item with id ${id}`);
     }
   }
 

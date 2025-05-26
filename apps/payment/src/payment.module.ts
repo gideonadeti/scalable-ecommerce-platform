@@ -4,6 +4,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { PaymentController } from './payment.controller';
 import { PaymentService } from './payment.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
 
 @Module({
   imports: [
@@ -41,6 +43,12 @@ import { PaymentService } from './payment.service';
     ]),
   ],
   controllers: [PaymentController],
-  providers: [PaymentService],
+  providers: [
+    PaymentService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RmqLoggingInterceptor,
+    },
+  ],
 })
 export class PaymentModule {}

@@ -48,6 +48,7 @@ export class PaymentService {
       const products = await firstValueFrom<Product[]>(
         this.productsClient.send({ cmd: 'find-products-by-ids' }, productIds),
       );
+      const productMap = new Map(products.map((p) => [p.id, p]));
       const frontendBaseUrl =
         this.configService.get<string>('FRONTEND_BASE_URL');
       const stripe = new Stripe(
@@ -59,14 +60,9 @@ export class PaymentService {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: products.find((product) => product.id === item.productId)
-                ?.name as string,
+              name: productMap.get(item.productId)!.name,
             },
-            unit_amount:
-              Number(
-                products.find((product) => product.id === item.productId)
-                  ?.price,
-              ) * 100,
+            unit_amount: Number(productMap.get(item.productId)?.price) * 100,
           },
           quantity: item.quantity,
         })),
@@ -110,12 +106,11 @@ export class PaymentService {
       const products = await firstValueFrom<Product[]>(
         this.productsClient.send({ cmd: 'find-products-by-ids' }, productIds),
       );
+      const productMap = new Map(products.map((p) => [p.id, p]));
       const orderItems = cartItems.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
-        price: Number(
-          products.find((product) => product.id === item.productId)?.price,
-        ),
+        price: Number(productMap.get(item.productId)?.price),
       }));
       const order = await firstValueFrom<{ id: string }>(
         this.ordersClient.send({ cmd: 'create-order' }, { userId, orderItems }),

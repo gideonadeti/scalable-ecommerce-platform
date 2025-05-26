@@ -49,4 +49,9 @@ export class ProductsController {
   handleFindOneProduct(@Payload() data: string) {
     return this.productsService.findOneProduct(data);
   }
+
+  @MessagePattern({ cmd: 'find-products-by-ids' })
+  handleFindProductsByIds(@Payload() data: string[]) {
+    return this.productsService.findProductsByIds(data);
+  }
 }

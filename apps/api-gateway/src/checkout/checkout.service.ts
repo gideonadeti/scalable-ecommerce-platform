@@ -1,6 +1,7 @@
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -17,6 +18,10 @@ export class CheckoutService {
 
   private handleError(error: MicroserviceError, action: string) {
     this.logger.error(`Failed to ${action}`, error);
+
+    if (error.name === 'BadRequestException') {
+      throw new BadRequestException(error.message);
+    }
 
     throw new InternalServerErrorException(`Failed to ${action}`);
   }

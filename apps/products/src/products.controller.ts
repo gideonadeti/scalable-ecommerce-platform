@@ -4,6 +4,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from 'apps/api-gateway/src/products/dto/create-product.dto';
 import { FindAllProductsDto } from 'apps/api-gateway/src/products/dto/find-all-products.dto';
+import { CartItem } from 'apps/cart-items/generated/prisma';
 
 @Controller()
 export class ProductsController {
@@ -53,5 +54,10 @@ export class ProductsController {
   @MessagePattern({ cmd: 'find-products-by-ids' })
   handleFindProductsByIds(@Payload() data: string[]) {
     return this.productsService.findProductsByIds(data);
+  }
+
+  @MessagePattern({ cmd: 'decrement-quantities' })
+  handleDecrementQuantities(@Payload() data: CartItem[]) {
+    return this.productsService.decrementQuantities(data);
   }
 }

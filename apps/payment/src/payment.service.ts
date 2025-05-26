@@ -91,13 +91,7 @@ export class PaymentService {
       );
 
       await firstValueFrom<Product[]>(
-        this.productsClient.send(
-          { cmd: 'decrement-quantities' },
-          cartItems.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-          })),
-        ),
+        this.productsClient.send({ cmd: 'decrement-quantities' }, cartItems),
       );
 
       didDecrementProducts = true;

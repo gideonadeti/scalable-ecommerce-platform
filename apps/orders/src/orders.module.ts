@@ -5,6 +5,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
       provide: APP_INTERCEPTOR,
       useClass: RmqLoggingInterceptor,
     },
+    PrismaService,
   ],
 })
 export class OrdersModule {}

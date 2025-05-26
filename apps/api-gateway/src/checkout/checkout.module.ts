@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { CheckoutController } from './checkout.controller';
+import { CheckoutService } from './checkout.service';
 
 @Module({
   imports: [
@@ -22,5 +23,6 @@ import { CheckoutController } from './checkout.controller';
     ]),
   ],
   controllers: [CheckoutController],
+  providers: [CheckoutService],
 })
 export class CheckoutModule {}

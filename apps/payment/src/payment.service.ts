@@ -17,6 +17,7 @@ export class PaymentService {
   constructor(
     @Inject('CART_ITEMS_SERVICE') private cartItemsClient: ClientProxy,
     @Inject('PRODUCTS_SERVICE') private productsClient: ClientProxy,
+    @Inject('ORDERS_SERVICE') private ordersClient: ClientProxy,
     private configService: ConfigService,
   ) {}
 
@@ -79,6 +80,78 @@ export class PaymentService {
       return session.url;
     } catch (error) {
       this.handleError(error, 'checkout');
+    }
+  }
+
+  async handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
+    const userId = session.metadata!.userId;
+    let cartItems: CartItem[] = [];
+    let didDecrementProducts = false;
+    let orderId: string | null = null;
+
+    try {
+      cartItems = await firstValueFrom<CartItem[]>(
+        this.cartItemsClient.send({ cmd: 'find-all-cart-items' }, userId),
+      );
+
+      await firstValueFrom<Product[]>(
+        this.productsClient.send(
+          { cmd: 'decrement-quantities' },
+          cartItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        ),
+      );
+
+      didDecrementProducts = true;
+
+      const productIds = cartItems.map((cartItem) => cartItem.productId);
+      const products = await firstValueFrom<Product[]>(
+        this.productsClient.send({ cmd: 'find-products-by-ids' }, productIds),
+      );
+      const orderItems = cartItems.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: Number(
+          products.find((product) => product.id === item.productId)?.price,
+        ),
+      }));
+      const order = await firstValueFrom<{ id: string }>(
+        this.ordersClient.send({ cmd: 'create-order' }, { userId, orderItems }),
+      );
+
+      orderId = order.id;
+
+      await firstValueFrom<CartItem[]>(
+        this.cartItemsClient.send({ cmd: 'clear-cart' }, userId),
+      );
+    } catch (error) {
+      await this.undoOperations(cartItems, didDecrementProducts, orderId);
+
+      this.handleError(error, 'handle successful checkout');
+    }
+  }
+
+  async undoOperations(
+    cartItems: CartItem[],
+    didDecrementProducts: boolean,
+    orderId: string | null,
+  ) {
+    try {
+      if (didDecrementProducts) {
+        await firstValueFrom<Product[]>(
+          this.productsClient.send({ cmd: 'increment-quantities' }, cartItems),
+        );
+      }
+
+      if (orderId) {
+        await firstValueFrom<{ id: string }>(
+          this.ordersClient.send({ cmd: 'delete-order' }, orderId),
+        );
+      }
+    } catch (error) {
+      this.handleError(error, 'undo operations');
     }
   }
 }

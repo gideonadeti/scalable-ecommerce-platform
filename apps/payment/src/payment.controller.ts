@@ -1,5 +1,6 @@
+import Stripe from 'stripe';
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 
 import { PaymentService } from './payment.service';
 
@@ -10,5 +11,10 @@ export class PaymentController {
   @MessagePattern({ cmd: 'checkout' })
   handleCheckout(@Payload() data: string) {
     return this.paymentService.checkout(data);
+  }
+
+  @EventPattern('handle-successful-checkout')
+  handleSuccessfulCheckout(@Payload() data: Stripe.Checkout.Session) {
+    return this.paymentService.handleSuccessfulCheckout(data);
   }
 }

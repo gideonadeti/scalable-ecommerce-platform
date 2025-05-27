@@ -45,6 +45,15 @@
         "tsConfigPath": "apps/cart-items/tsconfig.app.json"
       }
     },
+    "notification": {
+      "type": "application",
+      "root": "apps/notification",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification/tsconfig.app.json"
+      }
+    },
     "orders": {
       "type": "application",
       "root": "apps/orders",

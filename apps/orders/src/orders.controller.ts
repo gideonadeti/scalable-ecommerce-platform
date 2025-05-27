@@ -22,4 +22,9 @@ export class OrdersController {
       data.orderItems,
     );
   }
+
+  @MessagePattern({ cmd: 'delete-order' })
+  handleDeleteOrder(@Payload() data: string) {
+    return this.ordersService.deleteOrder(data);
+  }
 }

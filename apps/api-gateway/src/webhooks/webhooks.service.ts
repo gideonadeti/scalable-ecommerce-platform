@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ClientProxy } from '@nestjs/microservices';
 import {
   Inject,

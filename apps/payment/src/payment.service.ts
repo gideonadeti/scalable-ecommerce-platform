@@ -1,13 +1,13 @@
 import Stripe from 'stripe';
+import { ConfigService } from '@nestjs/config';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 import {
   BadRequestException,
   Inject,
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
 
 import { CartItem } from 'apps/cart-items/generated/prisma';
 import { Product } from 'apps/products/generated/prisma';

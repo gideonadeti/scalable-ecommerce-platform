@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { PaymentController } from './payment.controller';
 import { PaymentService } from './payment.service';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
 
 @Module({

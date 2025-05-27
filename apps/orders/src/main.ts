@@ -3,6 +3,7 @@ import { AsyncMicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 
 import { OrdersModule } from './orders.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<AsyncMicroserviceOptions>(
@@ -17,6 +18,17 @@ async function bootstrap() {
       }),
       inject: [ConfigService],
     },
+  );
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
   );
 
   await app.listen();

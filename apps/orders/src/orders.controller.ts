@@ -28,4 +28,9 @@ export class OrdersController {
   handleDeleteOrder(@Payload() data: string) {
     return this.ordersService.deleteOrder(data);
   }
+
+  @MessagePattern({ cmd: 'find-all-orders' })
+  handleFindAllOrders(@Payload() data: string) {
+    return this.ordersService.findAllOrders(data);
+  }
 }

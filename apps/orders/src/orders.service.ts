@@ -48,4 +48,16 @@ export class OrdersService {
       this.handleError(error, 'delete order');
     }
   }
+
+  async findAllOrders(userId: string) {
+    try {
+      return await this.prismaService.order.findMany({
+        where: {
+          userId,
+        },
+      });
+    } catch (error) {
+      this.handleError(error, 'fetch orders');
+    }
+  }
 }

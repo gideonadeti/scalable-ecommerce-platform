@@ -7,8 +7,8 @@ import { NotificationService } from './notification.service';
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @EventPattern('notify-user')
-  notifyUser(@Payload() data: string) {
-    return this.notificationService.notifyUser(data);
+  @EventPattern('send-order-confirmation')
+  handleSendOrderConfirmation(@Payload() data: string) {
+    return this.notificationService.sendOrderConfirmation(data);
   }
 }

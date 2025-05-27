@@ -121,7 +121,7 @@ export class PaymentService {
         this.cartItemsClient.send({ cmd: 'clear-cart' }, userId),
       );
 
-      this.notificationClient.emit('notify-user', userId);
+      this.notificationClient.emit('send-order-confirmation', userId);
     } catch (error) {
       await this.undoOperations(cartItems, didDecrementProducts, orderId);
 

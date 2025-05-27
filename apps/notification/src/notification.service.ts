@@ -13,7 +13,7 @@ export class NotificationService {
 
   private logger = new Logger(NotificationService.name);
 
-  async notifyUser(userId: string) {
+  async sendOrderConfirmation(userId: string) {
     try {
       const user = await firstValueFrom<User>(
         this.authClient.send({ cmd: 'find-one-user' }, userId),

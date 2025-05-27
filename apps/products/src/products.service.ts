@@ -161,4 +161,23 @@ export class ProductsService {
       this.handleError(error, 'decrement quantities');
     }
   }
+
+  async incrementQuantities(cartItems: CartItem[]) {
+    try {
+      await this.prismaService.$transaction(
+        cartItems.map((cartItem) =>
+          this.prismaService.product.update({
+            where: { id: cartItem.productId },
+            data: {
+              quantity: {
+                increment: cartItem.quantity,
+              },
+            },
+          }),
+        ),
+      );
+    } catch (error) {
+      this.handleError(error, 'increment quantities');
+    }
+  }
 }

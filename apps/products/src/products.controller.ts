@@ -60,4 +60,9 @@ export class ProductsController {
   handleDecrementQuantities(@Payload() data: CartItem[]) {
     return this.productsService.decrementQuantities(data);
   }
+
+  @MessagePattern({ cmd: 'increment-quantities' })
+  handleIncrementQuantities(@Payload() data: CartItem[]) {
+    return this.productsService.incrementQuantities(data);
+  }
 }

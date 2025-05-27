@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
 import { ResendService } from './resend/resend.service';
+import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
 
 @Module({
   imports: [
@@ -28,6 +30,13 @@ import { ResendService } from './resend/resend.service';
     ]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationService, ResendService],
+  providers: [
+    NotificationService,
+    ResendService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RmqLoggingInterceptor,
+    },
+  ],
 })
 export class NotificationModule {}

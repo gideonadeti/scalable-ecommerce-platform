@@ -38,4 +38,9 @@ export class AuthController {
       data.refreshTokenFromCookie,
     );
   }
+
+  @MessagePattern({ cmd: 'find-one-user' })
+  handleFindOneUser(@Payload() data: string) {
+    return this.authService.findOneUser(data);
+  }
 }

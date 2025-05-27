@@ -1,7 +1,12 @@
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 
@@ -159,6 +164,22 @@ export class AuthService {
       return accessToken;
     } catch (error) {
       this.handleError(error, 'refresh token');
+    }
+  }
+
+  async findOneUser(userId: string) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`User with id ${userId} not found`);
+      }
+
+      return user;
+    } catch (error) {
+      this.handleError(error, 'find user');
     }
   }
 }

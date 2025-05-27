@@ -12,7 +12,7 @@ export class ResendService {
 
   async sendOrderConfirmation(to: string) {
     await this.resend.emails.send({
-      from: 'Gideon Adeti, CEO <onboarding@resend.dev>',
+      from: 'Gideon Adeti <onboarding@resend.dev>',
       to,
       subject: 'Thanks for your purchase',
       html: `

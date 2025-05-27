@@ -1,4 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from './prisma/prisma.service';
@@ -58,6 +63,30 @@ export class OrdersService {
       });
     } catch (error) {
       this.handleError(error, 'fetch orders');
+    }
+  }
+
+  async findOneOrder(userId: string, id: string) {
+    try {
+      const order = await this.prismaService.order.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!order) {
+        throw new NotFoundException(`Order with id ${id} not found`);
+      }
+
+      if (order.userId !== userId) {
+        throw new UnauthorizedException(
+          `You are not authorized to access order with id ${id}`,
+        );
+      }
+
+      return order;
+    } catch (error) {
+      this.handleError(error, `fetch order with id ${id}`);
     }
   }
 }

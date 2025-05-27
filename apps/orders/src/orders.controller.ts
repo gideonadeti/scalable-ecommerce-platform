@@ -33,4 +33,9 @@ export class OrdersController {
   handleFindAllOrders(@Payload() data: string) {
     return this.ordersService.findAllOrders(data);
   }
+
+  @MessagePattern({ cmd: 'find-one-order' })
+  handleFindOneOrder(@Payload() data: { userId: string; id: string }) {
+    return this.ordersService.findOneOrder(data.userId, data.id);
+  }
 }

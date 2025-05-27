@@ -48,4 +48,9 @@ export class CartItemsController {
   handleDeleteCartItem(@Payload() data: { userId: string; id: string }) {
     return this.cartItemsService.deleteCartItem(data.userId, data.id);
   }
+
+  @MessagePattern({ cmd: 'clear-cart' })
+  handleClearCart(@Payload() data: string) {
+    return this.cartItemsService.clearCart(data);
+  }
 }

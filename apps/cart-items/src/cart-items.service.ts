@@ -116,4 +116,14 @@ export class CartItemsService {
       this.handleError(error, `delete cart item with id ${id}`);
     }
   }
+
+  async clearCart(userId: string) {
+    try {
+      return await this.prismaService.cartItem.deleteMany({
+        where: { userId },
+      });
+    } catch (error) {
+      this.handleError(error, `clear cart for user with id ${userId}`);
+    }
+  }
 }

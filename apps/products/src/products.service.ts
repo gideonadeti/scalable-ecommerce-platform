@@ -6,6 +6,7 @@ import { CreateProductDto } from 'apps/api-gateway/src/products/dto/create-produ
 import { UpdateProductDto } from 'apps/api-gateway/src/products/dto/update-product.dto';
 import { FindAllProductsDto } from 'apps/api-gateway/src/products/dto/find-all-products.dto';
 import { Prisma } from '../generated/prisma';
+import { CartItem } from 'apps/cart-items/generated/prisma';
 
 @Injectable()
 export class ProductsService {
@@ -102,6 +103,16 @@ export class ProductsService {
     }
   }
 
+  async findProductsByIds(ids: string[]) {
+    try {
+      return await this.prismaService.product.findMany({
+        where: { id: { in: ids } },
+      });
+    } catch (error) {
+      this.handleError(error, 'fetch products by ids');
+    }
+  }
+
   async updateProduct(
     adminId: string,
     id: string,
@@ -124,6 +135,49 @@ export class ProductsService {
       });
     } catch (error) {
       this.handleError(error, `delete product with id ${id}`);
+    }
+  }
+
+  async decrementQuantities(cartItems: CartItem[]) {
+    try {
+      return await this.prismaService.$transaction(
+        cartItems.map((cartItem) =>
+          this.prismaService.product.update({
+            where: {
+              id: cartItem.productId,
+              quantity: {
+                gte: cartItem.quantity,
+              },
+            },
+            data: {
+              quantity: {
+                decrement: cartItem.quantity,
+              },
+            },
+          }),
+        ),
+      );
+    } catch (error) {
+      this.handleError(error, 'decrement quantities');
+    }
+  }
+
+  async incrementQuantities(cartItems: CartItem[]) {
+    try {
+      return await this.prismaService.$transaction(
+        cartItems.map((cartItem) =>
+          this.prismaService.product.update({
+            where: { id: cartItem.productId },
+            data: {
+              quantity: {
+                increment: cartItem.quantity,
+              },
+            },
+          }),
+        ),
+      );
+    } catch (error) {
+      this.handleError(error, 'increment quantities');
     }
   }
 }

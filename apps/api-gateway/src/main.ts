@@ -10,7 +10,7 @@ import {
 import { ApiGatewayModule } from './api-gateway.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiGatewayModule);
+  const app = await NestFactory.create(ApiGatewayModule, { rawBody: true });
 
   app.useGlobalPipes(
     new ValidationPipe({

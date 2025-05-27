@@ -91,7 +91,7 @@ export class PaymentService {
         this.cartItemsClient.send({ cmd: 'find-all-cart-items' }, userId),
       );
 
-      await firstValueFrom(
+      await firstValueFrom<Product[]>(
         this.productsClient.send({ cmd: 'decrement-quantities' }, cartItems),
       );
 
@@ -133,7 +133,7 @@ export class PaymentService {
   ) {
     try {
       if (didDecrementProducts) {
-        await firstValueFrom(
+        await firstValueFrom<Product[]>(
           this.productsClient.send({ cmd: 'increment-quantities' }, cartItems),
         );
       }

@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { OrdersService } from './orders.service';
+import { OrderItem } from './order-item/order-item.interface';
 
 @Controller()
 export class OrdersController {
@@ -13,7 +14,7 @@ export class OrdersController {
     data: {
       userId: string;
       total: number;
-      orderItems: { productId: string; quantity: number; price: number }[];
+      orderItems: OrderItem[];
     },
   ) {
     return this.ordersService.createOrder(

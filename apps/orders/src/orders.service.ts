@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from './prisma/prisma.service';
+import { OrderItem } from './order-item/order-item.interface';
 
 @Injectable()
 export class OrdersService {
@@ -18,11 +19,7 @@ export class OrdersService {
     throw new RpcException(error as Error);
   }
 
-  async createOrder(
-    userId: string,
-    total: number,
-    orderItems: { productId: string; quantity: number; price: number }[],
-  ) {
+  async createOrder(userId: string, total: number, orderItems: OrderItem[]) {
     try {
       return await this.prismaService.order.create({
         data: {

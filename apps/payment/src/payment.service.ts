@@ -19,6 +19,7 @@ export class PaymentService {
     @Inject('CART_ITEMS_SERVICE') private cartItemsClient: ClientProxy,
     @Inject('PRODUCTS_SERVICE') private productsClient: ClientProxy,
     @Inject('ORDERS_SERVICE') private ordersClient: ClientProxy,
+    @Inject('NOTIFICATION_SERVICE') private notificationClient: ClientProxy,
     private configService: ConfigService,
   ) {}
 
@@ -119,6 +120,8 @@ export class PaymentService {
       await firstValueFrom<CartItem[]>(
         this.cartItemsClient.send({ cmd: 'clear-cart' }, userId),
       );
+
+      this.notificationClient.emit('notify-user', userId);
     } catch (error) {
       await this.undoOperations(cartItems, didDecrementProducts, orderId);
 

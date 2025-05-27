@@ -55,6 +55,20 @@ import { RmqLoggingInterceptor } from './rmq-logging/rmq-logging.interceptor';
         inject: [ConfigService],
       },
     ]),
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        name: 'NOTIFICATION_SERVICE',
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('MESSAGE_BROKER_URL') as string],
+            queue: 'notification_queue',
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [PaymentController],
   providers: [

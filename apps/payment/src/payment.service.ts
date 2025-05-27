@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { CartItem } from 'apps/cart-items/generated/prisma';
 import { Product } from 'apps/products/generated/prisma';
+import { Order } from 'apps/orders/generated/prisma';
 
 @Injectable()
 export class PaymentService {
@@ -106,8 +107,11 @@ export class PaymentService {
         quantity: item.quantity,
         price: Number(productMap.get(item.productId)?.price),
       }));
-      const order = await firstValueFrom<{ id: string }>(
-        this.ordersClient.send({ cmd: 'create-order' }, { userId, orderItems }),
+      const order = await firstValueFrom<Order>(
+        this.ordersClient.send(
+          { cmd: 'create-order' },
+          { userId, total: session.amount_total! / 100, orderItems },
+        ),
       );
 
       orderId = order.id;
@@ -135,7 +139,7 @@ export class PaymentService {
       }
 
       if (orderId) {
-        await firstValueFrom<{ id: string }>(
+        await firstValueFrom<Order>(
           this.ordersClient.send({ cmd: 'delete-order' }, orderId),
         );
       }

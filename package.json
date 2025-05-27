@@ -10,7 +10,7 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:dev:all": "concurrently -n api-gateway,auth,cart-items,orders,payment,products -c cyan,blue,magenta,green,yellow,red \"npm run start:dev\" \"npm run start:dev auth\" \"npm run start:dev cart-items\" \"npm run start:dev orders\" \"npm run start:dev payment\" \"npm run start:dev products\"",
+    "start:dev:all": "concurrently -n api-gateway,auth,cart-items,orders,payment,products,notification -c cyan,blue,magenta,green,yellow,red,gray \"npm run start:dev\" \"npm run start:dev auth\" \"npm run start:dev cart-items\" \"npm run start:dev orders\" \"npm run start:dev payment\" \"npm run start:dev products\" \"npm run start:dev notification\"",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/scalable-ecommerce-platform/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

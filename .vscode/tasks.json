@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "api-gateway",
+      "type": "shell",
+      "command": "npm run start:dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "auth",
+      "type": "shell",
+      "command": "npm run start:dev auth",
+      "problemMatcher": []
+    },
+    {
+      "label": "cart-items",
+      "type": "shell",
+      "command": "npm run start:dev cart-items",
+      "problemMatcher": []
+    },
+    {
+      "label": "orders",
+      "type": "shell",
+      "command": "npm run start:dev orders",
+      "problemMatcher": []
+    },
+    {
+      "label": "payment",
+      "type": "shell",
+      "command": "npm run start:dev payment",
+      "problemMatcher": []
+    },
+    {
+      "label": "products",
+      "type": "shell",
+      "command": "npm run start:dev products",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start All Services",
+      "dependsOn": [
+        "api-gateway",
+        "auth",
+        "cart-items",
+        "orders",
+        "payment",
+        "products"
+      ],
+      "dependsOrder": "parallel",
+      "type": "shell"
+    }
+  ]
+}
